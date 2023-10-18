@@ -23,8 +23,14 @@ provider "azurerm" {
  
 
 data "azurerm_kubernetes_cluster" "credentials" {
-  name                = azurerm_kubernetes_cluster.demo.name
-  resource_group_name = azurerm_resource_group.demo.name
+  name                = azurerm_kubernetes_cluster.prueba_devops.name
+  resource_group_name = azurerm_resource_group.prueba_devops.name
+}
+
+provider "kubernetes" {
+    host                   = data.azurerm_kubernetes_cluster.credentials.kube_config.0.host
+    cluster_ca_certificate = base64decode(data.azurerm_kubernetes_cluster.credentials.kube_config.0.cluster_ca_certificate)
+    client_key             = base64decode(data.azurerm_kubernetes_cluster.credentials.kube_config.0.client_key)
 }
 
 provider "helm" {
